@@ -11,4 +11,9 @@ class Comment extends Model
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = true;
+
+    protected $attributes = [
+        'title' => 'Sample Title',
+        'comment' => 'Sample Comment'
+    ];
 }
