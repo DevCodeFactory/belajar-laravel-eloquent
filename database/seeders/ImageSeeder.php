@@ -19,7 +19,7 @@ class ImageSeeder extends Seeder
             $image = new Image();
             $image->url = 'https://www.devcodefactory.com/customers/image/1.jpg';
             $image->imageable_id = 'FAHMI';
-            $image->imageable_type = Customer::class;
+            $image->imageable_type = 'customer';
             $image->save();
         }
 
@@ -27,7 +27,7 @@ class ImageSeeder extends Seeder
             $image = new Image();
             $image->url = 'https://www.devcodefactory.com/products/image/1.jpg';
             $image->imageable_id = '1';
-            $image->imageable_type = Product::class;
+            $image->imageable_type = 'product';
             $image->save();
         }
     }
