@@ -257,4 +257,15 @@ class CategoryTest extends TestCase
         self::assertCount(2, $reviews);
     }
 
+    public function testQueryingRelations()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class]);
+
+        $category = Category::find('FOOD');
+        $products = $category->products()->where('price', '=', 200)->get();
+
+        self::assertCount(1, $products);
+        self::assertEquals('2', $products[0]->id);
+    }
+
 }
