@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Date;
 
 class Customer extends Model
@@ -43,5 +44,10 @@ class Customer extends Model
         return $this->belongsToMany(Product::class, 'customers_likes_products', 'customer_id', 'product_id')->withPivot('created_at')
             ->wherePivot('created_at', '>=', Date::now()->addDays(-7))
             ->using(Like::class);
+    }
+
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
     }
 }
