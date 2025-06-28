@@ -8,8 +8,6 @@ use Database\Seeders\CommentSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\TagSeeder;
 use Database\Seeders\VoucherSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class VoucherTest extends TestCase
@@ -73,7 +71,7 @@ class VoucherTest extends TestCase
         self::assertNotNull($comments);
 
         foreach ($comments as $comment) {
-            self::assertEquals(Voucher::class, $comment->commentable_type);
+            self::assertEquals('voucher', $comment->commentable_type);
             self::assertEquals($voucher->id, $comment->commentable_id);
         }
     }

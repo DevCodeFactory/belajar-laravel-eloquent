@@ -12,8 +12,6 @@ use Database\Seeders\TagSeeder;
 use Database\Seeders\VoucherSeeder;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertNotNull;
 
 class ProductTest extends TestCase
 {
@@ -66,8 +64,8 @@ class ProductTest extends TestCase
 
         $comments = $product->comments;
         foreach ($comments as $comment) {
-            assertEquals(Product::class, $comment->commentable_type);
-            assertEquals($product->id, $comment->commentable_id);
+            self::assertEquals('product', $comment->commentable_type);
+            self::assertEquals($product->id, $comment->commentable_id);
         }
     }
 
