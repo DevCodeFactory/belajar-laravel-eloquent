@@ -12,6 +12,7 @@ use Database\Seeders\WalletSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use function PHPUnit\Framework\assertNotNull;
 
 class CustomerTest extends TestCase
 {
@@ -79,6 +80,38 @@ class CustomerTest extends TestCase
 
         $products = $customer->likeProducts;
         self::assertCount(0, $products);
+    }
+
+    public function testPivotAttribute()
+    {
+        $this->testManyToMany();
+
+        $customer = Customer::find('FAHMI');
+        $products = $customer->likeProducts;
+
+        foreach ($products as $product) {
+            $pivot = $product->pivot;
+            self::assertNotNull($pivot);
+            self::assertNotNull($pivot->customer_id);
+            self::assertNotNull($pivot->product_id);
+            self::assertNotNull($pivot->created_at);
+        }
+    }
+
+    public function testPivotAttributeCondition()
+    {
+        $this->testManyToMany();
+
+        $customer = Customer::find('FAHMI');
+        $products = $customer->likeProductsLastWeek;
+
+        foreach ($products as $product) {
+            $pivot = $product->pivot;
+            self::assertNotNull($pivot);
+            self::assertNotNull($pivot->customer_id);
+            self::assertNotNull($pivot->product_id);
+            self::assertNotNull($pivot->created_at);
+        }
     }
 
 }
