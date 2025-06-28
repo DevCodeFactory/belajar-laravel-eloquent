@@ -77,4 +77,18 @@ class VoucherTest extends TestCase
         }
     }
 
+    public function testOneOfManyPolymorphic()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class, VoucherSeeder::class, CommentSeeder::class]);
+
+        $voucher = Voucher::first();
+        self::assertNotNull($voucher);
+
+        $latestComment = $voucher->latestComment;
+        self::assertNotNull($latestComment);
+
+        $oldestComment = $voucher->oldestComment;
+        self::assertNotNull($oldestComment);
+    }
+
 }

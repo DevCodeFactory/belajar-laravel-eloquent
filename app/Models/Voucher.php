@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Voucher extends Model
@@ -37,4 +38,15 @@ class Voucher extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function latestComment(): MorphOne
+    {
+        return $this->morphOne(Comment::class, 'commentable')->latest('created_at');
+    }
+
+    public function oldestComment(): MorphOne
+    {
+        return $this->morphOne(Comment::class, 'commentable')->oldest('created_at');
+    }
+
 }
