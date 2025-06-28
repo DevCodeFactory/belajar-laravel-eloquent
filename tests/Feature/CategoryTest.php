@@ -280,4 +280,16 @@ class CategoryTest extends TestCase
         self::assertEquals(1, $total);
     }
 
+    public function testEloquentCollection()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class]);
+
+        $products = Product::query()->get();
+        self::assertCount(2, $products);
+
+        $products = $products->toQuery()->where('price', 200)->get();
+        self::assertCount(1, $products);
+        self::assertEquals('2', $products[0]->id);
+    }
+
 }
