@@ -6,6 +6,7 @@ use App\Models\Voucher;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\CommentSeeder;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\TagSeeder;
 use Database\Seeders\VoucherSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -89,6 +90,26 @@ class VoucherTest extends TestCase
 
         $oldestComment = $voucher->oldestComment;
         self::assertNotNull($oldestComment);
+    }
+
+    public function testManyToManyPolymorphic()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class, VoucherSeeder::class, TagSeeder::class]);
+
+        $voucher = Voucher::first();
+        self::assertNotNull($voucher);
+
+        $tags = $voucher->tags;
+        self::assertNotNull($tags);
+
+        foreach ($tags as $tag) {
+            self::assertNotNull($tag->id);
+            self::assertNotNull($tag->name);
+
+            $products = $tag->products;
+            self::assertNotNull($products);
+            self::assertCount(1, $products);
+        }
     }
 
 }
