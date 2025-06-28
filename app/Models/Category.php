@@ -19,6 +19,10 @@ class Category extends Model
 
     protected $fillable = ['id', 'name', 'description'];
 
+    protected $casts = [
+        'created_at' => 'datetime:U',
+    ];
+
     protected static function booted(): void
     {
         parent::booted();

@@ -10,6 +10,7 @@ use Database\Seeders\ImageSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\TagSeeder;
 use Database\Seeders\VoucherSeeder;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNotNull;
@@ -103,6 +104,32 @@ class ProductTest extends TestCase
             self::assertNotNull($vouchers);
             self::assertCount(1, $vouchers);
         }
+    }
+
+    public function testSerialization()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class]);
+
+        $products = Product::query()->get();
+        self::assertCount(2, $products);
+
+        $json = $products->toJson(JSON_PRETTY_PRINT);
+        Log::info($json);
+
+        $array = $products->toArray();
+        self::assertIsArray($array);
+    }
+
+    public function testSerializationRelations()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class, ImageSeeder::class]);
+
+        $products = Product::query()->get();
+        $products->load(['category', 'image']);
+        self::assertCount(2, $products);
+
+        $json = $products->toJson(JSON_PRETTY_PRINT);
+        Log::info($json);
     }
 
 }
