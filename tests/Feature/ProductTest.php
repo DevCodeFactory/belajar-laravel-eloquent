@@ -5,9 +5,12 @@ namespace Tests\Feature;
 use App\Models\Category;
 use App\Models\Product;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\CommentSeeder;
 use Database\Seeders\ImageSeeder;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\VoucherSeeder;
 use Tests\TestCase;
+use function PHPUnit\Framework\assertEquals;
 
 class ProductTest extends TestCase
 {
@@ -49,6 +52,20 @@ class ProductTest extends TestCase
         $image = $product->image;
         self::assertNotNull($image);
         self::assertEquals('https://www.devcodefactory.com/products/image/1.jpg', $image->url);
+    }
+
+    public function testOneToManyPolymorphic()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class, VoucherSeeder::class, CommentSeeder::class]);
+
+        $product = Product::find('1');
+        self::assertNotNull($product);
+
+        $comments = $product->comments;
+        foreach ($comments as $comment) {
+            assertEquals(Product::class, $comment->commentable_type);
+            assertEquals($product->id, $comment->commentable_id);
+        }
     }
 
 }

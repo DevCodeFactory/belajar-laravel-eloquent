@@ -3,6 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Voucher;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\CommentSeeder;
+use Database\Seeders\ProductSeeder;
 use Database\Seeders\VoucherSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -56,6 +59,22 @@ class VoucherTest extends TestCase
 
         $total = Voucher::nonActive()->count();
         self::assertEquals(0, $total);
+    }
+
+    public function testOneToManyPolymorphic()
+    {
+        $this->seed([CategorySeeder::class, ProductSeeder::class, VoucherSeeder::class, CommentSeeder::class]);
+
+        $voucher = Voucher::first();
+        self::assertNotNull($voucher);
+
+        $comments = $voucher->comments;
+        self::assertNotNull($comments);
+
+        foreach ($comments as $comment) {
+            self::assertEquals(Voucher::class, $comment->commentable_type);
+            self::assertEquals($voucher->id, $comment->commentable_id);
+        }
     }
 
 }
